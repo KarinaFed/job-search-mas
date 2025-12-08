@@ -1,0 +1,23 @@
+[project]
+name = "job-search-mas"
+version = "0.1.0"
+description = "Multi-Agent System for Intelligent Job Search Automation"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.104.1",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic>=2.5.0",
+    "openai>=1.3.5",
+    "langchain>=0.0.350",
+    "litellm>=1.17.0",
+    "psycopg2-binary>=2.9.9",
+    "redis>=5.0.1",
+    "sqlalchemy>=2.0.23",
+    "sentence-transformers>=2.2.2",
+    "httpx>=0.25.2",
+    "python-dotenv>=1.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
