@@ -18,7 +18,7 @@ INJECTION_PATTERNS = [
 
 
 def validate_input(data: Dict[str, Any]) -> Dict[str, Any]:
-    """Validate and sanitize input data."""
+    """Validate and sanitize input data"""
     try:
         # Check for prompt injection
         text_fields = _extract_text_fields(data)
@@ -59,7 +59,7 @@ def validate_input(data: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def sanitize_output(data: Dict[str, Any]) -> Dict[str, Any]:
-    """Sanitize output data."""
+    """Sanitize output data"""
     try:
         # Remove sensitive information
         sanitized = data.copy()
@@ -95,7 +95,7 @@ def _detect_prompt_injection(text: str) -> bool:
 
 
 def _extract_text_fields(data: Dict[str, Any], prefix: str = "") -> List[tuple]:
-    """Extract all text fields from nested dictionary."""
+    """Extract all text fields from nested dictionary"""
     fields = []
     
     for key, value in data.items():
@@ -116,7 +116,7 @@ def _extract_text_fields(data: Dict[str, Any], prefix: str = "") -> List[tuple]:
 
 
 def _sanitize_dict(data: Dict[str, Any]) -> Dict[str, Any]:
-    """Recursively sanitize dictionary."""
+    """Recursively sanitize dictionary"""
     sanitized = {}
     for key, value in data.items():
         if isinstance(value, dict):
@@ -132,9 +132,7 @@ def _sanitize_dict(data: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def validate_schema(data: Dict[str, Any], schema: Dict[str, Any]) -> bool:
-    """Validate data against schema (simplified)."""
-    # This is a simplified schema validation
-    # For production, use jsonschema library
+    """Validate data against schema"""
     required_fields = schema.get("required", [])
     
     for field in required_fields:
@@ -142,4 +140,5 @@ def validate_schema(data: Dict[str, Any], schema: Dict[str, Any]) -> bool:
             return False
     
     return True
+
 
