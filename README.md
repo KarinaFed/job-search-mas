@@ -4,18 +4,17 @@ Intelligent multi-agent system that automates and optimizes job search processes
 
 ## Project Overview
 
-This system implements a multi-agent architecture with 4 specialized agents:
+This system implements a multi-agent architecture with 3 specialized agents:
 
 1. **Profile & Strategy Analyst** - Analyzes resumes and creates personalized job search strategies
 2. **Market Intelligence Agent** - Researches job market and identifies opportunities, ranks vacancies by relevance
 3. **Content Personalization Agent** - Generates tailored application materials (cover letters, adapted resumes)
-4. **Application & Analytics Tracker** - Monitors application status and performance, adjusts strategies based on data insights (for future expansion of functionality when enough data is accumulated for analysis)
 
 ## Architecture
 
 ### System Components
 
-- **Agents**: 4 specialized LLM-based agents with distinct roles
+- **Agents**: 3 specialized LLM-based agents with distinct roles
 - **Tools**: Resume parser, Job search API (HH.ru), Content generator, Tool router
 - **Memory**:
   - **Short-term**: Redis for session context
@@ -29,7 +28,6 @@ This system implements a multi-agent architecture with 4 specialized agents:
 1. **Assessment** -> Profile analysis and strategy creation
 2. **Job Matching** -> Market research and relevance ranking
 3. **Resume/Cover Letter** -> Content personalization
-4. **Tracking** -> Application monitoring and KPI analytics
 
 ## Quick Start
 
@@ -53,11 +51,7 @@ cd Project
 python create_env.py
 
 # Option 2: Copy manually
-# Windows PowerShell:
 Copy-Item env.example .env
-
-# Linux/Mac:
-cp env.example .env
 ```
 
 3. Update `.env` with your configuration:
@@ -105,7 +99,7 @@ uvicorn api.main:app --reload
 
 **POST** `/api/tasks`
 - Execute tasks through the multi-agent system
-- Task types: `analyze_profile`, `find_jobs`, `create_application`, `track_analytics`, `full_journey`
+- Task types: `analyze_profile`, `find_jobs`, `create_application`, `full_journey`
 
 Example:
 ```json
@@ -126,7 +120,6 @@ Example:
 ### User Data
 
 - **GET** `/api/users/{user_id}/applications` - Get user's applications
-- **GET** `/api/users/{user_id}/metrics` - Get KPI metrics
 
 ## Tools and Technologies Used
 
@@ -185,13 +178,6 @@ Example:
 - **Output Sanitization**: Removal of sensitive information
 - **Error Handling**: Graceful error management with fallback strategies
 - **Guardrails**: Pattern-based injection detection
-
-## KPI Metrics
-
-The system tracks:
-- Total applications
-- Applications viewed (CTR)
-- Average relevance score
 
 ## Testing
 
@@ -260,4 +246,5 @@ The system uses a multi-layered communication architecture:
 - **Short-term (Redis)**: Session context, workspace data (TTL-based)
 - **Long-term (PostgreSQL)**: User profiles, job postings, applications, strategies
 - **Vector Memory (pgvector)**: Semantic embeddings for job matching
+
 
