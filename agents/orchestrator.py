@@ -3,7 +3,6 @@ from typing import Dict, Any, List
 from agents.strategy_agent import StrategyAgent
 from agents.market_intelligence_agent import MarketIntelligenceAgent
 from agents.personalization_agent import PersonalizationAgent
-from agents.analytics_agent import AnalyticsAgent
 from memory.redis_memory import redis_memory
 from loguru import logger
 import uuid
@@ -17,8 +16,7 @@ class Orchestrator:
         self.agents = {
             "strategy": StrategyAgent(),
             "market_intelligence": MarketIntelligenceAgent(),
-            "personalization": PersonalizationAgent(),
-            "analytics": None  # Will be initialized with DB session
+            "personalization": PersonalizationAgent()
         }
         logger.info("Orchestrator initialized")
     
@@ -44,8 +42,6 @@ class Orchestrator:
                 return await self._find_jobs(task_request, session_id)
             elif task_type == "create_application":
                 return await self._create_application(task_request, session_id)
-            elif task_type == "track_analytics":
-                return await self._track_analytics(task_request, session_id)
             elif task_type == "full_journey":
                 return await self._full_journey(task_request, session_id)
             else:
@@ -191,37 +187,6 @@ class Orchestrator:
             "agent_trace": context["agent_trace"]
         }
     
-    async def _track_analytics(self, task_request: Dict, session_id: str) -> Dict[str, Any]:
-        """Execute analytics tracking workflow."""
-        context = redis_memory.get_session_context(session_id)
-        context["agent_trace"].append("analytics_agent")
-        
-        # Initialize analytics agent with DB
-        from models.database import SessionLocal
-        db = SessionLocal()
-        try:
-            analytics_agent = AnalyticsAgent(db)
-            
-            analytics_task = {
-                "session_id": session_id,
-                "user_id": task_request.get("user_id"),
-                "task_type": task_request.get("input_data", {}).get("task_type", "get_metrics")
-            }
-            analytics_task.update(task_request.get("input_data", {}))
-            
-            result = await analytics_agent.process(analytics_task, context)
-            redis_memory.update_session_context(session_id, context)
-            
-            return {
-                "task_id": str(uuid.uuid4()),
-                "session_id": session_id,
-                "status": "completed" if result.get("success") else "failed",
-                "result": result,
-                "agent_trace": context["agent_trace"]
-            }
-        finally:
-            db.close()
-    
     async def _full_journey(self, task_request: Dict, session_id: str) -> Dict[str, Any]:
         """Execute full user journey: analyze → find jobs → create application."""
         results = {}
@@ -283,4 +248,3 @@ class Orchestrator:
             "result": results,
             "agent_trace": context.get("agent_trace", [])
         }
-
