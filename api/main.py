@@ -165,17 +165,6 @@ async def get_user_applications(user_id: str, db=Depends(get_db)):
     }
 
 
-@app.get("/api/users/{user_id}/metrics")
-async def get_user_metrics(user_id: str, db=Depends(get_db)):
-    """Get KPI metrics for a user."""
-    from agents.analytics_agent import AnalyticsAgent
-    
-    analytics_agent = AnalyticsAgent(db)
-    metrics = await analytics_agent._calculate_kpis(user_id)
-    
-    return metrics.dict()
-
-
 @app.post("/api/resume/upload")
 async def upload_resume(
     file: UploadFile = File(...),
