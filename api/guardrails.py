@@ -36,7 +36,6 @@ def validate_input(data: Dict[str, Any]) -> Dict[str, Any]:
             "analyze_profile",
             "find_jobs",
             "create_application",
-            "track_analytics",
             "full_journey"
         ]
         if task_type and task_type not in valid_task_types:
